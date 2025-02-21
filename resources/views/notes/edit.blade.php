@@ -41,14 +41,14 @@
                 @enderror
             </div>
             <div class="mb-3">
-                <label for="inputcontent" class="form-label"><strong>content:</strong></label>
+                <label for="inputsubject" class="form-label"><strong>subject:</strong></label>
                 <textarea
-                    class="form-control @error('content') is-invalid @enderror"
+                    class="form-control @error('subject') is-invalid @enderror"
                     style="height:150px"
                     Title="subject"
-                    id="inputcontent"
-                    placeholder="content">{{ $note->content }}</textarea>
-                @error('content')
+                    id="inputsubject"
+                    placeholder="subject">{{ $note->subject }}</textarea>
+                @error('subject')
                     <div class="form-text text-danger">{{ $message }}</div>
                 @enderror
             </div>
