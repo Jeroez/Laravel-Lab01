@@ -13,5 +13,7 @@
         <input type="password" name="password" placeholder="Password" required>
         <button type="submit">Login</button>
     </form>
+
+    <p>Don't have an account? <a href="/register">Register here</a></p>
 </body>
 </html>

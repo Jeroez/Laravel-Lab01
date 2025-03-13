@@ -13,5 +13,13 @@ class Note extends Model
         'title',
         'content',
         'subject',
+        'user_id',
     ];
+    
+
+
+public function user()
+{
+    return $this->belongsTo(User::class);
+}
 }
