@@ -21,33 +21,42 @@ class UserController extends Controller
      * Handle user registration.
      */
     public function register(Request $request)
-    {
-        // Debug: Log request data
-        \Log::info('Register Request:', $request->all());
-    
-        $request->validate([
+{
+    \Log::info('Register Request:', $request->all());  // Logs the request data
+
+    try {
+        // Validate the request
+        $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
         ]);
-    
-        try {
-            $user = User::create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
-            ]);
-    
-            \Log::info('User Created:', ['user' => $user]);
-    
-            Auth::login($user);
-    
-            return redirect('/notes')->with('success', 'Registration successful!');
-        } catch (\Exception $e) {
-            \Log::error('Registration failed:', ['error' => $e->getMessage()]);
-            return back()->withErrors('Registration failed: ' . $e->getMessage());
+
+        \Log::info('Validation Passed:', $validatedData);
+
+        // Create the user
+        $user = User::create([
+            'name' => $validatedData['name'],
+            'email' => $validatedData['email'],
+            'password' => bcrypt($validatedData['password']),
+        ]);
+
+        if (!$user) {
+            throw new \Exception('User creation returned null');
         }
+
+        \Log::info('User Created:', ['user' => $user]);
+
+        // Log the user in after registration
+        Auth::login($user);
+
+        return redirect('/notes')->with('success', 'Registration successful!');
+    } catch (\Exception $e) {
+        \Log::error('Registration failed:', ['error' => $e->getMessage()]);
+        return back()->withErrors('Registration failed: ' . $e->getMessage());
     }
+}
+
     
     /**
      * Show the login form.
